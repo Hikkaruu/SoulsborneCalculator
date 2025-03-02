@@ -1,7 +1,6 @@
 import pandas as pd
 from sqlalchemy.orm import Session
 from app.database import SessionLocal
-from app.models.bloodborne.trickster_weapons import TricksterWeapons
 
 def seed_from_excel(file_path: str, sheet_name: str, db_model: Session = None):
     df = None
@@ -13,12 +12,7 @@ def seed_from_excel(file_path: str, sheet_name: str, db_model: Session = None):
     except Exception as e:
         print(f"Error loading Excel sheet: {e}")
         return
-
-    print("----------------------------------------------------")
-    print(f"Excel sheet {sheet_name} Loaded Successfuly:")
-    print(df)
-    print("----------------------------------------------------")
-
+    
     # connect to DB
     db = SessionLocal()
 
@@ -33,6 +27,10 @@ def seed_from_excel(file_path: str, sheet_name: str, db_model: Session = None):
                 db.add(weapon)
             db.commit()
             print("Seeding completed successfully.")
+            print("----------------------------------------------------")
+            print(f"Excel sheet {sheet_name} Loaded Successfuly:")
+            print(df)
+            print("----------------------------------------------------")
         else:
             print("Table already seeded.")
     except Exception as e:
