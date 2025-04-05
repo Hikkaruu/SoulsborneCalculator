@@ -46,27 +46,6 @@ def sample_firearm_data():
         "arcane_req": 0
     }
 
-
-    return {
-        "upgrade_lvl": 0,
-        "name": "Test Pistol2",
-        "physical_atk": 100,
-        "blood_atk": 50,
-        "arcane_atk": 0,
-        "fire_atk": 0,
-        "bolt_atk": 0,
-        "bullet_use": 1,
-        "strength_scaling": 0.5,
-        "skill_scaling": 0.8,
-        "bloodtinge_scaling": 1.2,
-        "arcane_scaling": 0,
-        "socket": 0,
-        "strenght_req": 6,
-        "skill_req": 5,
-        "bloodtinge_req": 8,
-        "arcane_req": 0
-    }
-
 # Tests
 def test_get_firearm_by_id(client: TestClient):
     response = client.get(f"/firearms/id/23")

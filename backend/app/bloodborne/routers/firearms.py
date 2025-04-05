@@ -64,17 +64,17 @@ def create_firearm(firearm: FirearmCreate, db: Session = Depends(get_db)):
         if "unique_firearm_name" in str(e):
             raise HTTPException(
                 status_code=status.HTTP_409_CONFLICT,
-                detail=f"Firearm with name '{firearm.name}' already exists"
+                detail=f"Firearm with name '{firearm.name}' already exists!"
             )
         elif "check_upgrade_lvl" in str(e):
             raise HTTPException(
                 status_code=status.HTTP_409_CONFLICT,
-                detail="Upgrade level must be between 0 and 10"
+                detail="Upgrade level must be between 0 and 10!"
             )
         else:
             raise HTTPException(
                 status_code=status.HTTP_409_CONFLICT,
-                detail="Number in field must be positive"
+                detail="Number in field must be positive!"
             )
 
 
