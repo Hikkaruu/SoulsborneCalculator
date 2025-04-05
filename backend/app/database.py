@@ -6,7 +6,10 @@ import os
 
 load_dotenv(".venv/.env")
 
-SQLALCHEMY_DATABASE_URL = os.getenv("DATABASE_URL")
+if os.getenv("TESTING") == "True":
+    SQLALCHEMY_DATABASE_URL = os.getenv("TEST_DATABASE_URL")
+else:
+    SQLALCHEMY_DATABASE_URL = os.getenv("DATABASE_URL")
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 

@@ -7,7 +7,6 @@ class TricksterWeapons(Base):
     __table_args__ = (
         UniqueConstraint('name', name='unique_weapon_name'), 
         CheckConstraint('upgrade_lvl >= 0 AND upgrade_lvl <= 10', name='check_upgrade_lvl'),
-        # No negative numbers
         CheckConstraint('physical_atk >= 0', name='check_physical_atk'),
         CheckConstraint('blood_atk >= 0', name='check_blood_atk'),
         CheckConstraint('arcane_atk >= 0', name='check_arcane_atk'),

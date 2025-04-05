@@ -13,7 +13,6 @@ def seed_from_excel(file_path: str, sheet_name: str, db_model: Session = None):
         print(f"Error loading Excel sheet: {e}")
         return
     
-    # connect to DB
     db = SessionLocal()
 
     try:
@@ -21,7 +20,6 @@ def seed_from_excel(file_path: str, sheet_name: str, db_model: Session = None):
             # Excel data to dict
             weapons_data = df.to_dict(orient="records")
 
-            # Add data to database
             for weapon_data in weapons_data:
                 weapon = db_model(**weapon_data)
                 db.add(weapon)

@@ -8,7 +8,6 @@ from app.bloodborne.routers import firearms
 
 app = FastAPI()
 
-#Create tables
 Base.metadata.create_all(bind=engine)
 
 seeder.seed_from_excel('app\\seeders\\bloodborne.xlsx', "Use_TricksterWeapons", TricksterWeapons)

@@ -1,5 +1,6 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
+from sqlalchemy.exc import IntegrityError
 from ..schemas.firearms import Firearm, FirearmCreate, FirearmUpdate
 from ..services.firearms import FirearmService
 from ...database import SessionLocal
@@ -55,10 +56,28 @@ def get_all_wieldable_firearms(strength: int, skill: int, bloodtinge: int, arcan
 
 @router.post("/", response_model=Firearm)
 def create_firearm(firearm: FirearmCreate, db: Session = Depends(get_db)):
-    service = FirearmService(db)
-    return service.create_firearm(firearm)
+    try:
+        service = FirearmService(db)
+        return service.create_firearm(firearm)
+    except IntegrityError as e:
+        db.rollback()
+        if "unique_firearm_name" in str(e):
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail=f"Firearm with name '{firearm.name}' already exists"
+            )
+        elif "check_upgrade_lvl" in str(e):
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail="Upgrade level must be between 0 and 10"
+            )
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail="Number in field must be positive"
+            )
 
-# Zaktualizuj rekord broni palnej
+
 @router.put("/{firearm_id}", response_model=Firearm)
 def update_firearm(firearm_id: int, firearm: FirearmUpdate, db: Session = Depends(get_db)):
     service = FirearmService(db)
@@ -67,7 +86,6 @@ def update_firearm(firearm_id: int, firearm: FirearmUpdate, db: Session = Depend
         raise HTTPException(status_code=404, detail=f"Firearm with id:{firearm_id} not found")
     return updated_firearm
 
-# Usuń rekord broni palnej
 @router.delete("/{firearm_id}")
 def delete_firearm(firearm_id: int, db: Session = Depends(get_db)):
     service = FirearmService(db)
